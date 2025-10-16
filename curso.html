@@ -1,0 +1,1399 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Curso Completo de Marketing Digital</title>
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+  
+  <style>
+    /* ---------------------------------------------------------------------------------- */
+    /* ESTILOS DE TEMA ESCURO (PADRÃO) */
+    /* ---------------------------------------------------------------------------------- */
+
+    :root{
+      /* Váriaveis de Estilo para Dark Mode (DEFAULT) */
+      --primary: #64b5f6; /* Azul claro para contraste */
+      --accent: #1e88e5;  
+      --success: #a5d6a7;
+      --danger: #ef9a9a;
+      --bg: #1e2125; /* Fundo escuro */
+      --card: #2c2f33; /* Cards escuros */
+      --text-dark: #f0f6fc; /* Texto principal claro */
+      --text-muted: #95a5a6; /* Texto suave claro */
+      --text-main: #f0f6fc;
+      --shadow-light: 0 4px 12px rgba(255,255,255,0.05);
+      --shadow-medium: 0 10px 30px rgba(255,255,255,0.08);
+      --radius: 12px;
+      --base-font-size: 16px;
+      --border-color: #44475a;
+      --badge-bg: #3c6e40;
+      --teste-bg: #222529; /* Fundo do quiz */
+    }
+    
+    * {
+      box-sizing: border-box; 
+      transition: background-color 0.2s, color 0.2s, border-color 0.2s, box-shadow 0.2s; 
+    }
+
+    body{
+      margin:0;
+      font-family:'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+      background: var(--bg);
+      color:var(--text-main);
+      font-size: var(--base-font-size);
+      min-height: 100vh;
+    }
+
+    /* HEADER */
+    header{
+      background: var(--accent); 
+      color:white;
+      padding: 30px 20px;
+      text-align:center;
+      box-shadow: var(--shadow-medium);
+      margin-bottom: 20px;
+    }
+
+    /* LAYOUT PRINCIPAL (DO CURSO) */
+    .course-layout{
+      max-width:1200px; 
+      margin: 22px auto;
+      padding:20px;
+      display:grid;
+      grid-template-columns: 320px 1fr;
+      gap:25px; 
+    }
+    @media(max-width:900px){
+      .course-layout{grid-template-columns: 1fr; padding:15px}
+    }
+
+    /* CARDS & SIDEBAR */
+    .card, .sidebar{
+      background:var(--card);
+      border-radius:var(--radius);
+      padding:18px;
+      box-shadow:var(--shadow-light); 
+      border: 1px solid var(--border-color); 
+    }
+    .sidebar{
+      height: fit-content;
+      position:sticky;
+      top:25px;
+    }
+    .sidebar h3{margin:0 0 15px 0;color:var(--primary)}
+
+    /* LISTA DE MÓDULOS */
+    .progress{
+      background:var(--border-color);border-radius:var(--radius);height:10px;overflow:hidden;margin-bottom:12px;
+    }
+    .progress > div{
+      height:100%; background:var(--primary);
+      width:0%;
+    }
+    .lista-modulos{list-style:none;padding:0;margin:0}
+    .lista-modulos li{
+      padding:10px 12px;border-radius:8px;margin-bottom:6px;cursor:pointer;
+      display:flex;align-items:center;gap:8px;
+      font-weight: 500;
+      color: var(--text-dark);
+    }
+    .lista-modulos li:hover:not(.active){
+      background: var(--teste-bg); /* Use background do teste para hover suave */
+    }
+    .lista-modulos li.active{
+      background: var(--primary);
+      color: white;
+      font-weight: 600;
+      box-shadow: 0 4px 10px rgba(100, 181, 246, 0.4);
+    }
+    .lista-modulos li.active strong {
+      color: white;
+    }
+    .small{font-size:0.85em;color:var(--text-muted)}
+
+    /* CONTEÚDO DA AULA */
+    .module-header{display:flex;gap:20px;align-items:center;flex-wrap:wrap;padding-bottom:15px;border-bottom: 1px solid var(--border-color);}
+    .module-header img{width:140px;height:90px;object-fit:cover;border-radius:8px;flex-shrink:0}
+    .module-desc{color:var(--text-muted); margin-top:8px}
+    
+    .aula-title label{
+      display: block;
+      padding: 12px 0;
+      cursor: pointer;
+      font-size: 1.1em;
+      font-weight: 600;
+      margin-top: 15px; 
+    }
+    .aula-title input[type="checkbox"]{
+      accent-color: var(--primary);
+      transform: scale(1.2);
+      margin-right: 8px;
+    }
+    .aula-text{
+      margin-top:10px;
+      color:var(--text-main);
+      line-height: 1.6;
+      padding-left: 25px;
+      border-left: 2px solid var(--primary); /* Destaque na cor primária */
+      margin-left: 5px;
+    }
+    .aula-text p, .aula-text ul {
+      margin-bottom: 15px;
+      font-size: 1.05em;
+    }
+    hr.lesson-divider{margin:20px 0;border:none;border-top:1px dashed var(--border-color);}
+
+    /* BOTÕES */
+    .nav-actions{display:flex;justify-content:flex-end;margin-top:20px;gap:12px}
+    .btn{
+      background:var(--primary);color:white;border:none;padding:12px 18px;border-radius:8px;cursor:pointer;
+      box-shadow:0 4px 15px rgba(100, 181, 246, 0.4);
+      font-weight: 600;
+      font-size: 1em; 
+      transition: all 0.3s ease;
+    }
+    .btn:hover{
+      transform: translateY(-2px);
+      box-shadow:0 6px 20px rgba(100, 181, 246, 0.6);
+    }
+    .btn.ghost{
+      background:transparent;color:var(--primary);border:1px solid var(--primary);box-shadow:none;
+    }
+    .btn.ghost:hover{
+      transform: none;
+      background: var(--teste-bg);
+      box-shadow: none;
+    }
+    .btn:disabled{opacity:0.6;cursor:not-allowed;box-shadow: none;transform: none;}
+    .badge{display:inline-block;padding:4px 8px;border-radius:999px;background:var(--badge-bg);color:var(--success);font-weight:600}
+
+    /* ESTILOS PARA O TESTE (QUIZ) */
+    .teste{
+      margin-top:30px;
+      padding:25px;
+      border-radius:var(--radius);
+      background:var(--teste-bg); 
+      border: 1px solid var(--border-color);
+      border-left: 6px solid var(--primary); 
+    }
+    .teste h4{
+      margin:0 0 20px 0;
+      color:var(--primary);
+      padding-bottom: 8px;
+      font-size: 1.3em;
+    }
+    .teste p{
+      margin:20px 0 10px 0;
+      font-weight:600; 
+      font-size: 1.05em;
+      color: var(--text-dark);
+    }
+    .teste label{
+      display: block;
+      margin: 10px 0;
+      padding: 8px 10px;
+      border-radius: 6px;
+      transition: background 0.2s;
+      cursor: pointer;
+    }
+    .teste label:hover{
+      background: var(--border-color);
+    }
+    .resultado{
+      margin-top:15px;
+      font-weight:700;
+      padding: 10px;
+      border-radius: 6px;
+      background: #3c6e40;
+      color: var(--success);
+      border: 1px solid var(--success);
+    }
+    .feedback-certo { color: var(--success); }
+    .feedback-errado { color: var(--danger); }
+    .question-feedback {
+      display: inline-block;
+      margin-left: 10px;
+      font-weight: bold;
+      font-size: 0.9em;
+    }
+    
+    /* SPLASH SCREEN & REGISTRATION */
+    .view-container {
+        max-width: 800px;
+        margin: 50px auto;
+        padding: 30px;
+        text-align: center;
+    }
+    #splash-screen {
+        min-height: 80vh;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        background-image: url('https://images.unsplash.com/photo-1557804506-669c3a3c9a62?w=1600&q=80&auto=format&fit=crop'); 
+        background-size: cover;
+        background-position: center;
+        color: white;
+        text-shadow: 0 2px 4px rgba(0,0,0,0.5);
+        border-radius: var(--radius);
+        box-shadow: var(--shadow-medium);
+        position: relative;
+        padding: 50px;
+    }
+    #splash-screen::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(0, 0, 0, 0.65); 
+        border-radius: var(--radius);
+        z-index: 0;
+    }
+    #splash-screen h1, #splash-screen p, #splash-screen button {
+        z-index: 1;
+    }
+    #splash-screen h1 { font-size: 3.5em; margin-bottom: 10px; }
+    #splash-screen p { font-size: 1.2em; margin-bottom: 30px; max-width: 600px; }
+
+    /* PRÉ-REGISTRO */
+    #pre-registration { text-align: left; }
+    #pre-registration h2 { color: var(--primary); font-size: 2em; text-align: center; margin-bottom: 20px; }
+    .registration-form label {
+        display: block; margin-bottom: 8px; font-weight: 600; color: var(--text-dark); font-size: 0.95em;
+    }
+    .registration-form input[type="text"] {
+        width: 100%; padding: 12px; margin-bottom: 20px; border: 1px solid var(--border-color);
+        border-radius: 8px; font-size: 1em; background: var(--teste-bg); color: var(--text-main);
+    }
+    .registration-form button { width: 100%; margin-top: 10px; }
+    .description-box {
+        background: var(--teste-bg); border: 1px solid var(--border-color); padding: 20px;
+        border-radius: var(--radius); margin-bottom: 30px;
+    }
+    .description-box h3 { color: var(--accent); margin-top: 0; }
+
+    /* Modal de Certificado de Matrícula (Minimalista) */
+    .modal-overlay {
+      position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(0, 0, 0, 0.7); display: none; justify-content: center;
+      align-items: center; z-index: 1000;
+    }
+    .modal-content {
+      background: var(--card); padding: 30px; border-radius: 12px;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.45); max-width: 450px; width: 90%;
+      text-align: center;
+    }
+    .close-btn {
+      float: right; font-size: 1.5rem; font-weight: bold; cursor: pointer; color: var(--text-muted);
+      border: none; background: none; margin-top: -10px; margin-right: -10px;
+    }
+    
+    /* Mensagem Final com Confetes */
+    #mensagemFinal {
+        background: linear-gradient(145deg, var(--teste-bg), var(--card));
+        padding: 30px; border-radius: 15px; text-align: center;
+        margin: 20px 0; box-shadow: 0 5px 20px rgba(var(--primary), 0.1);
+        display: none; 
+        position: relative;
+        border: 2px solid var(--primary);
+    }
+    #mensagemFinal h2 { color: var(--primary); margin-top: 0; font-size: 1.8rem; }
+    .confetti {
+        position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+        pointer-events: none; overflow: hidden;
+    }
+    .confetti span {
+        position: absolute; font-size: 1.5rem; opacity: 0;
+        animation: pop 2s linear infinite;
+    }
+    .confetti span:nth-child(1) { top: 10%; left: 10%; animation-delay: 0s; color: gold; }
+    .confetti span:nth-child(2) { top: 30%; left: 80%; animation-delay: 0.5s; color: var(--primary); }
+    .confetti span:nth-child(3) { top: 50%; left: 30%; animation-delay: 1s; color: var(--success); }
+    .confetti span:nth-child(4) { top: 70%; left: 60%; animation-delay: 1.5s; color: #ff5722; }
+    .confetti span:nth-child(5) { top: 90%; left: 5%; animation-delay: 0.2s; color: yellow; }
+    .confetti span:nth-child(6) { top: 40%; left: 50%; animation-delay: 0.8s; color: #8bc34a; }
+
+    @keyframes pop {
+        0% { transform: translateY(0) rotate(0deg); opacity: 1; }
+        100% { transform: translateY(-500px) rotate(720deg); opacity: 0; }
+    }
+
+    .hidden { display: none !important; }
+
+  </style>
+</head>
+<body id="body">
+
+<div id="app">
+
+    <div id="splash-screen" class="view-container">
+        <h1>Curso Completo de Marketing Digital</h1>
+        <p>Domine as estratégias digitais que geram crescimento e vendas, do SEO à Inteligência Artificial. Curso 100% gratuito e com certificado.</p>
+        <button class="btn" onclick="showView('pre-registration')">Começar Agora →</button>
+    </div>
+
+    <div id="pre-registration" class="view-container card hidden">
+        <h2>Inscrição e Detalhes do Curso</h2>
+        
+        <div class="description-box">
+            <h3>Visão Geral do Curso (40 Aulas)</h3>
+            <p>Este curso intensivo de **9 módulos (40 aulas)** é projetado para transformar você em um profissional de marketing digital completo. Cobrimos desde os fundamentos de tráfego até estratégias avançadas de Growth Hacking, Copywriting e o uso de Inteligência Artificial.</p>
+            <p><strong>Requisito de Aprovação:</strong> Média mínima de 60% de acertos nos testes de cada módulo e 100% das aulas concluídas.</p>
+            <p style="color:var(--success); font-weight: 600;">Seu progresso (aulas e respostas) é salvo automaticamente no seu navegador.</p>
+        </div>
+
+        <div class="registration-form">
+            <p>Para emitirmos seus certificados, por favor, insira seus dados abaixo:</p>
+            <label for="nomeAluno">Nome Completo (para o Certificado):</label>
+            <input type="text" id="nomeAluno" placeholder="Ex: Maria da Silva" required>
+            <label for="cpfAluno">CPF (para o Certificado e Matrícula):</label>
+            <input type="text" id="cpfAluno" placeholder="000.000.000-00" maxlength="14" onkeyup="formatarCpf(this)" required>
+            <button class="btn" onclick="saveAlunoInfo()">Confirmar Inscrição e Iniciar Curso</button>
+            <p id="nomeError" style="color:var(--danger); margin-top:10px; display:none;">Por favor, preencha todos os campos corretamente (Nome > 5 caracteres, CPF completo).</p>
+        </div>
+    </div>
+
+
+    <main id="course-content" class="course-layout hidden">
+        <aside class="sidebar card">
+            <h3>Progresso do curso (40 Aulas)</h3>
+            <div class="progress"><div id="barraProgresso"></div></div>
+            <div class="small" id="textoProgresso">0 / 40 aulas concluídas</div>
+
+            <hr style="margin:18px 0;border:none;border-top:1px solid var(--border-color)">
+
+            <ul class="lista-modulos" id="listaModulos">
+              <li data-mod="1" class="active"><strong>Mód. 1</strong> Introdução (4 Aulas)</li>
+              <li data-mod="2"><strong>Mód. 2</strong> Redes Sociais & Tráfego (5 Aulas)</li>
+              <li data-mod="3"><strong>Mód. 3</strong> SEO & Conteúdo (6 Aulas)</li>
+              <li data-mod="4"><strong>Mód. 4</strong> E-mail Marketing & Automação (4 Aulas)</li>
+              <li data-mod="5"><strong>Mód. 5</strong> Google Ads & Performance (6 Aulas)</li>
+              <li data-mod="6"><strong>Mód. 6</strong> Análise, Métricas & Growth (5 Aulas)</li>
+              <li data-mod="7"><strong>Mód. 7</strong> Copywriting e Persuasão (4 Aulas)</li>
+              <li data-mod="8"><strong>Mód. 8</strong> CRM e Pós-Venda (5 Aulas)</li>
+              <li data-mod="9"><strong>Mód. 9</strong> Inteligência Artificial (5 Aulas)</li>
+            </ul>
+
+            <div style="margin-top:18px">
+              <div class="small">Status dos módulos (Aprovação Mín. 60%)</div>
+              <div class="check-row"><span class="small">M1 (4 A):</span><span id="statusM1" class="badge">0%</span></div>
+              <div class="check-row"><span class="small">M2 (5 A):</span><span id="statusM2" class="badge">0%</span></div>
+              <div class="check-row"><span class="small">M3 (6 A):</span><span id="statusM3" class="badge">0%</span></div>
+              <div class="check-row"><span class="small">M4 (4 A):</span><span id="statusM4" class="badge">0%</span></div>
+              <div class="check-row"><span class="small">M5 (6 A):</span><span id="statusM5" class="badge">0%</span></div>
+              <div class="check-row"><span class="small">M6 (5 A):</span><span id="statusM6" class="badge">0%</span></div>
+              <div class="check-row"><span class="small">M7 (4 A):</span><span id="statusM7" class="badge">0%</span></div>
+              <div class="check-row"><span class="small">M8 (5 A):</span><span id="statusM8" class="badge">0%</span></div>
+              <div class="check-row"><span class="small">M9 (5 A):</span><span id="statusM9" class="badge">0%</span></div>
+              <div style="margin-top: 10px;"><span class="small">Acertos Totais (27 Q):</span><span id="acertosTotais" class="badge">0/27</span></div>
+            </div>
+            
+            <hr style="margin:18px 0;border:none;border-top:1px solid var(--border-color)">
+            <div class="small">Certificados</div>
+            <div style="margin-top:8px; display: flex; flex-direction: column; gap: 8px;">
+              <button id="verMatriculaBtn" class="btn ghost" disabled onclick="gerarCertificadoMatricula()">Certificado de Matrícula</button>
+              <button id="verCertBtn" class="btn" disabled onclick="gerarCertificado()">Certificado de Conclusão</button>
+            </div>
+            <div class="small" style="margin-top: 12px;">Nome registrado: <strong id="alunoNomeDisplay">N/A</strong></div>
+            <div class="small">CPF registrado: <strong id="alunoCpfDisplay">N/A</strong></div>
+            <div class="small" style="margin-top: 10px; display: none;" id="numeroCertificadoDisplay">Nº Validação: <strong id="numeroCertificadoValue" style="color: var(--primary);"></strong></div>
+        </aside>
+
+        <section class="card" id="conteudoPrincipal">
+            <div class="module-header" id="cabecalhoModulo">
+              <img id="imgModulo" src="https://images.unsplash.com/photo-1559526324-593bc073d938?w=1200&q=60&auto=format&fit=crop" alt="Imagem do módulo">
+              <div>
+                <h2 id="tituloModulo">Módulo 1 — Introdução ao Marketing Digital (4 Aulas)</h2>
+                <div class="module-desc small" id="descModulo">Visão geral, importância, funil de vendas e métricas iniciais.</div>
+              </div>
+            </div>
+
+            <div id="mensagemFinal">
+                <div class="confetti">
+                    <span>🎉</span><span>🎊</span><span>🥳</span><span>⭐</span><span>✨</span><span>🎈</span>
+                </div>
+                <h2>Parabéns!! você concluiu o curso de marketing digital.</h2>
+                <p>Aqui está o seu certificado. O número de validação foi gerado com sucesso.</p>
+                <button id="btnVerCertificadoFinal" class="btn" style="margin-top: 15px;" onclick="gerarCertificado()">Acessar Certificado</button>
+            </div>
+
+            <div id="aulasWrapper">
+              
+              <article id="mod1" class="aula-conteudo active" data-modulo="1">
+                <div class="aula-title">
+                  <label><input type="checkbox" class="aula-checkbox" data-aula="m1a1"> <strong>Aula 1 — O que é Marketing Digital, Funil de Vendas e o LTV</strong></label>
+                </div>
+                <div class="aula-text">
+                  <p>Marketing Digital é o conjunto de estratégias e ações de comunicação realizadas por meio da internet. A grande vantagem é a **mensuração em tempo real** e a **hiper-segmentação**. O conceito central é o **Funil de Vendas** (Topo, Meio e Fundo). O sucesso financeiro é medido pelo **LTV** (Lifetime Value), o valor que o cliente gera ao longo do tempo.</p>
+                  <p>Métricas de Ação: **Cliques**, **Engajamento** e **Leads**.</p>
+                </div>
+
+                <hr class="lesson-divider">
+                <div class="aula-title">
+                  <label><input type="checkbox" class="aula-checkbox" data-aula="m1a2"> <strong>Aula 2 — Mensuração, ROI e CPA: O Ciclo de Otimização</strong></label>
+                </div>
+                <div class="aula-text">
+                  <p>A métrica financeira mais importante é o **ROI** (Retorno sobre Investimento). O **CPA** (Custo por Aquisição) indica o custo para gerar um novo cliente. A otimização se baseia em diminuir o CPA e aumentar o ROI, realocando o orçamento para campanhas de melhor performance.</p>
+                </div>
+
+                <hr class="lesson-divider">
+                <div class="aula-title">
+                  <label><input type="checkbox" class="aula-checkbox" data-aula="m1a3"> <strong>Aula 3 — Tráfego Híbrido: Orgânico, Pago e de Referência</strong></label>
+                </div>
+                <div class="aula-text">
+                  <p>Uma estratégia madura combina diferentes fontes. O **Tráfego Orgânico** (SEO) é gratuito a longo prazo. O **Tráfego Pago** (Anúncios) é imediato, mas exige investimento contínuo. O **Tráfego de Referência** vem de links externos. A combinação de todos é a forma mais segura de crescer.</p>
+                </div>
+
+                <hr class="lesson-divider">
+                <div class="aula-title">
+                  <label><input type="checkbox" class="aula-checkbox" data-aula="m1a4"> <strong>Aula 4 — Market Research: Definição de Persona e Nicho</strong></label>
+                </div>
+                <div class="aula-text">
+                  <p>Antes de tudo, você deve saber quem é o seu cliente ideal (Persona) e qual o seu nicho. Criar um conteúdo genérico para todos é o mesmo que não criar conteúdo para ninguém.</p>
+                </div>
+
+                <div class="teste">
+                  <h4>Teste de Conhecimento - Módulo 1 (3 Questões)</h4>
+                  
+                  <p>1) Qual métrica indica o valor financeiro que um cliente gera para o negócio durante todo o seu relacionamento?</p>
+                  <label><input type="radio" name="q1" value="errada"> CPA</label>
+                  <label><input type="radio" name="q1" value="correta"> LTV (Lifetime Value)</label>
+                  <label><input type="radio" name="q1" value="errada"> CTR</label>
+                  <span class="question-feedback" id="feedback-q1"></span>
+
+                  <p>2) A fase do Funil de Vendas onde o cliente toma a decisão de compra é o(a):</p>
+                  <label><input type="radio" name="q2" value="errada"> Topo (ToFu)</label>
+                  <label><input type="radio" name="q2" value="correta"> Fundo (BoFu)</label>
+                  <label><input type="radio" name="q2" value="errada"> Meio (MoFu)</label>
+                  <span class="question-feedback" id="feedback-q2"></span>
+
+                  <p>3) Qual tipo de tráfego é imediato e exige investimento contínuo?</p>
+                  <label><input type="radio" name="q3" value="errada"> Orgânico</label>
+                  <label><input type="radio" name="q3" value="errada"> Referência</label>
+                  <label><input type="radio" name="q3" value="correta"> Pago</label>
+                  <span class="question-feedback" id="feedback-q3"></span>
+
+                  <button class="btn btn-verificar" data-modulo="1" onclick="verificarTeste(1)">Verificar Respostas</button>
+                  <div class="resultado" id="resM1">Acertos: 0/3</div>
+                </div>
+
+                <div class="nav-actions">
+                  <button class="btn" onclick="proximoModulo(1)">Próximo módulo →</button>
+                </div>
+              </article>
+              
+              <article id="mod2" class="aula-conteudo" data-modulo="2">
+                <div class="aula-title">
+                  <label><input type="checkbox" class="aula-checkbox" data-aula="m2a1"> <strong>Aula 1 — Estrutura Meta Ads (Facebook/Instagram) e Pixels</strong></label>
+                </div>
+                <div class="aula-text">
+                  <p>O ecossistema Meta Ads (Facebook e Instagram) é o maior motor de tráfego pago para B2C. A estrutura correta é: **Campanha** (Objetivo) > **Conjunto de Anúncios** (Público/Orçamento) > **Anúncio** (Criativo/Copy). Instalar e configurar o **Pixel** é crucial para medir conversões e construir públicos personalizados.</p>
+                </div>
+
+                <hr class="lesson-divider">
+                <div class="aula-title">
+                  <label><input type="checkbox" class="aula-checkbox" data-aula="m2a2"> <strong>Aula 2 — Públicos Avançados: Custom, Lookalike e Retargeting</strong></label>
+                </div>
+                <div class="aula-text">
+                  <p>O sucesso do Meta Ads depende da audiência. O **Público Personalizado** (Custom) é o mais quente (lista de e-mails, visitantes do site). O **Público Semelhante** (Lookalike) é a principal ferramenta de escala. **Retargeting** é essencial: mostrar anúncios para quem já interagiu, mas não comprou.</p>
+                </div>
+
+                <hr class="lesson-divider">
+                <div class="aula-title">
+                  <label><input type="checkbox" class="aula-checkbox" data-aula="m2a3"> <strong>Aula 3 — Otimização de Criativos para Vídeos Curtos (Reels/TikTok)</strong></label>
+                </div>
+                <div class="aula-text">
+                  <p>O algoritmo prioriza o tempo de retenção. O formato **Vídeo Curto** é essencial para o orgânico. Use os 3 primeiros segundos para prender a atenção (Hook) e sempre forneça uma Call to Action clara no final.</p>
+                </div>
+
+                <hr class="lesson-divider">
+                <div class="aula-title">
+                  <label><input type="checkbox" class="aula-checkbox" data-aula="m2a4"> <strong>Aula 4 — Community Building, Humanização e Engajamento Real</strong></label>
+                </div>
+                <div class="aula-text">
+                  <p>Construir uma comunidade (grupos, fóruns) transforma clientes em **Brand Advocates** (Defensores da Marca). Humanizar a marca (mostrar bastidores, equipe) gera confiança e lealdade a longo prazo.</p>
+                </div>
+
+                <hr class="lesson-divider">
+                <div class="aula-title">
+                  <label><input type="checkbox" class="aula-checkbox" data-aula="m2a5"> <strong>Aula 5 — Influencer Marketing e Parcerias Estratégicas</strong></label>
+                </div>
+                <div class="aula-text">
+                  <p>O marketing de influência não se resume a grandes celebridades. Micro e nano-influencers geram maior engajamento e confiança em nichos específicos. A chave é a autenticidade e o alinhamento de valores.</p>
+                </div>
+
+                <div class="teste">
+                  <h4>Teste de Conhecimento - Módulo 2 (3 Questões)</h4>
+                  
+                  <p>4) Qual é a principal ferramenta de escala no Meta Ads, que busca usuários parecidos com seus melhores clientes?</p>
+                  <label><input type="radio" name="q4" value="errada"> Público por Interesse</label>
+                  <label><input type="radio" name="q4" value="correta"> Público Semelhante (Lookalike)</label>
+                  <label><input type="radio" name="q4" value="errada"> Retargeting</label>
+                  <span class="question-feedback" id="feedback-q4"></span>
+
+                  <p>5) O que o algoritmo das redes sociais prioriza acima de tudo para entrega orgânica?</p>
+                  <label><input type="radio" name="q5" value="errada"> Número de seguidores</label>
+                  <label><input type="radio" name="q5" value="correta"> Tempo de retenção e Engajamento</label>
+                  <label><input type="radio" name="q5" value="errada"> O uso de muitas hashtags</label>
+                  <span class="question-feedback" id="feedback-q5"></span>
+
+                  <p>6) Qual a estrutura correta de uma campanha no Meta Ads?</p>
+                  <label><input type="radio" name="q6" value="errada"> Anúncio > Conjunto > Campanha</label>
+                  <label><input type="radio" name="q6" value="correta"> Campanha > Conjunto de Anúncios > Anúncio</label>
+                  <label><input type="radio" name="q6" value="errada"> Pixel > Público > Campanha</label>
+                  <span class="question-feedback" id="feedback-q6"></span>
+
+                  <button class="btn btn-verificar" data-modulo="2" onclick="verificarTeste(2)">Verificar Respostas</button>
+                  <div class="resultado" id="resM2">Acertos: 0/3</div>
+                </div>
+
+                <div class="nav-actions">
+                  <button class="btn" onclick="proximoModulo(2)">Próximo módulo →</button>
+                </div>
+              </article>
+
+              <article id="mod3" class="aula-conteudo" data-modulo="3">
+                <div class="aula-title">
+                  <label class="inline"><input type="checkbox" class="aula-checkbox" data-aula="m3a1"> <strong>Aula 1 — SEO: O Pilar do Tráfego Orgânico e Autoridade</strong></label>
+                </div>
+                <div class="aula-text">
+                  <p>SEO (Search Engine Optimization) é o motor de crescimento sustentável. O objetivo é ranquear seu site nas primeiras posições do Google de forma não paga (orgânica). Ele se divide em **SEO On-Page** (otimizações internas) e **SEO Off-Page** (ações externas, como Link Building).</p>
+                </div>
+
+                <hr class="lesson-divider">
+                <div class="aula-title">
+                  <label class="inline"><input type="checkbox" class="aula-checkbox" data-aula="m3a2"> <strong>Aula 2 — Pesquisa de Palavras-Chave e Mapeamento de Intenção</strong></label>
+                </div>
+                <div class="aula-text">
+                  <p>Use ferramentas como Google Keyword Planner ou SEMrush para encontrar as palavras-chave do seu público. O mais importante é a **Intenção de Busca**: o usuário quer Comprar (Transacional), Aprender (Informacional) ou Navegar (Navegacional)?</p>
+                </div>
+
+                <hr class="lesson-divider">
+                <div class="aula-title">
+                  <label class="inline"><input type="checkbox" class="aula-checkbox" data-aula="m3a3"> <strong>Aula 3 — SEO On-Page: Títulos, Meta e Estrutura do Conteúdo</strong></label>
+                </div>
+                <div class="aula-text">
+                  <p>Otimize sua página internamente. Inclua a Palavra-Chave Principal no **Título (H1)**, na **Meta Description** e na URL. Use títulos secundários (H2, H3) para estruturar o texto, facilitando a leitura pelo usuário e pelo robô do Google.</p>
+                </div>
+                
+                <hr class="lesson-divider">
+                <div class="aula-title">
+                  <label class="inline"><input type="checkbox" class="aula-checkbox" data-aula="m3a4"> <strong>Aula 4 — Link Building: Autoridade e Estratégia Off-Page</strong></label>
+                </div>
+                <div class="aula-text">
+                  <p>**Link Building** é o processo de obter backlinks (links de outros sites para o seu). O Google entende um backlink como um "voto de confiança", aumentando a **Autoridade de Domínio**. O foco deve ser em qualidade (sites relevantes) e não em quantidade.</p>
+                </div>
+                
+                <hr class="lesson-divider">
+                <div class="aula-title">
+                  <label class="inline"><input type="checkbox" class="aula-checkbox" data-aula="m3a5"> <strong>Aula 5 — SEO Técnico: Core Web Vitals, Mobile e Sitemap</strong></label>
+                </div>
+                <div class="aula-text">
+                  <p>O Google prioriza sites com boa experiência do usuário. Otimize o **Core Web Vitals** (velocidade e estabilidade), garanta que o site seja **Mobile-First** e forneça um **Sitemap** atualizado ao Google Search Console.</p>
+                </div>
+                
+                <hr class="lesson-divider">
+                <div class="aula-title">
+                  <label class="inline"><input type="checkbox" class="aula-checkbox" data-aula="m3a6"> <strong>Aula 6 — SEO Local (Google Meu Negócio) e Busca por Voz</strong></label>
+                </div>
+                <div class="aula-text">
+                  <p>Se você tem um negócio físico, otimize seu perfil no **Google Meu Negócio** para aparecer no "mapa". Com a popularização de assistentes virtuais, otimize o conteúdo para frases de perguntas completas (ex: "Qual a melhor pizzaria aberta agora?").</p>
+                </div>
+
+
+                <div class="teste">
+                  <h4>Teste de Conhecimento - Módulo 3 (3 Questões)</h4>
+                  
+                  <p>7) Qual o fator de SEO que mais contribui para aumentar a Autoridade de Domínio (Domain Authority)?</p>
+                  <label><input type="radio" name="q7" value="correta"> Link Building (Backlinks de qualidade)</label>
+                  <label><input type="radio" name="q7" value="errada"> Apenas o número de fotos</label>
+                  <label><input type="radio" name="q7" value="errada"> Usar a palavra-chave 100 vezes no texto</label>
+                  <span class="question-feedback" id="feedback-q7"></span>
+
+                  <p>8) O que a Intenção de Busca "Transacional" significa?</p>
+                  <label><input type="radio" name="q8" value="errada"> O usuário quer apenas informações</label>
+                  <label><input type="radio" name="q8" value="correta"> O usuário tem a intenção de realizar uma ação ou compra</label>
+                  <label><input type="radio" name="q8" value="errada"> O usuário está procurando a home page</label>
+                  <span class="question-feedback" id="feedback-q8"></span>
+
+                  <p>9) O que são Core Web Vitals?</p>
+                  <label><input type="radio" name="q9" value="correta"> Métricas do Google que avaliam a experiência de velocidade e estabilidade do site</label>
+                  <label><input type="radio" name="q9" value="errada"> Apenas o ranking de cliques</label>
+                  <label><input type="radio" name="q9" value="errada"> Um tipo de palavra-chave</label>
+                  <span class="question-feedback" id="feedback-q9"></span>
+
+                  <button class="btn btn-verificar" data-modulo="3" onclick="verificarTeste(3)">Verificar Respostas</button>
+                  <div class="resultado" id="resM3">Acertos: 0/3</div>
+                </div>
+
+                <div class="nav-actions">
+                  <button class="btn" onclick="proximoModulo(3)">Próximo módulo →</button>
+                </div>
+              </article>
+              
+              <article id="mod4" class="aula-conteudo" data-modulo="4">
+                <div class="aula-title">
+                  <label class="inline"><input type="checkbox" class="aula-checkbox" data-aula="m4a1"> <strong>Aula 1 — E-mail Marketing: O Ativo Mais Valioso (A Lista)</strong></label>
+                </div>
+                <div class="aula-text">
+                  <p>O E-mail Marketing é o canal com o maior ROI, pois a lista de contatos é um **ativo que você possui**, não estando sujeito a mudanças de algoritmo como as redes sociais. É ideal para nutrição e conversão no Fundo do Funil.</p>
+                </div>
+
+                <hr class="lesson-divider">
+                <div class="aula-title">
+                  <label class="inline"><input type="checkbox" class="aula-checkbox" data-aula="m4a2"> <strong>Aula 2 — Captação de Leads e Landing Pages de Alta Conversão</strong></label>
+                </div>
+                <div class="aula-text">
+                  <p>Use **Landing Pages** (páginas de destino focadas em conversão) e ofereça uma **Isca Digital** (eBook, checklist) em troca do e-mail. A página deve ter um foco único e uma Call to Action clara e irresistível.</p>
+                </div>
+
+                <hr class="lesson-divider">
+                <div class="aula-title">
+                  <label class="inline"><input type="checkbox" class="aula-checkbox" data-aula="m4a3"> <strong>Aula 3 — Segmentação e Automação: O Workflow Perfeito</strong></label>
+                </div>
+                <div class="aula-text">
+                  <p>**Segmentação** é a chave: separe a lista por interesse ou estágio no funil. **Automações** (Workflows) são sequências de e-mails pré-programados que disparam em resposta a ações específicas (ex: e-mail de boas-vindas após inscrição, e-mail de recuperação de carrinho abandonado).</p>
+                </div>
+
+                <hr class="lesson-divider">
+                <div class="aula-title">
+                  <label class="inline"><input type="checkbox" class="aula-checkbox" data-aula="m4a4"> <strong>Aula 4 — Métricas Essenciais: Open Rate, CTR e Higienização</strong></label>
+                </div>
+                <div class="aula-text">
+                  <p>O **Open Rate** (Taxa de Abertura) mede a eficácia do seu Assunto. O **CTR** (Taxa de Clique) mede o interesse no conteúdo. Faça a **Higienização** da lista periodicamente, removendo e-mails inválidos ou inativos para manter a reputação do seu remetente.</p>
+                </div>
+
+                <div class="teste">
+                  <h4>Teste de Conhecimento - Módulo 4 (3 Questões)</h4>
+                  
+                  <p>10) Qual o principal benefício da Automação no E-mail Marketing?</p>
+                  <label><input type="radio" name="q10" value="correta"> Disparar e-mails personalizados em escala e em resposta a ações do lead</label>
+                  <label><input type="radio" name="q10" value="errada"> Enviar a mesma newsletter para todos</label>
+                  <label><input type="radio" name="q10" value="errada"> Trocar e-mails por SMS</label>
+                  <span class="question-feedback" id="feedback-q10"></span>
+
+                  <p>11) Qual métrica indica a eficácia da linha de Assunto (Subject) do seu e-mail?</p>
+                  <label><input type="radio" name="q11" value="errada"> Taxa de Conversão</label>
+                  <label><input type="radio" name="q11" value="correta"> Taxa de Abertura (Open Rate)</label>
+                  <label><input type="radio" name="q11" value="errada"> Taxa de Rejeição (Bounce Rate)</label>
+                  <span class="question-feedback" id="feedback-q11"></span>
+
+                  <p>12) O que é o objetivo principal de uma Landing Page?</p>
+                  <label><input type="radio" name="q12" value="errada"> Exibir todos os produtos da loja</label>
+                  <label><input type="radio" name="q12" value="correta"> Converter o visitante em Lead (capturar e-mail) ou cliente</label>
+                  <label><input type="radio" name="q12" value="errada"> Ser a página inicial do site</label>
+                  <span class="question-feedback" id="feedback-q12"></span>
+
+                  <button class="btn btn-verificar" data-modulo="4" onclick="verificarTeste(4)">Verificar Respostas</button>
+                  <div class="resultado" id="resM4">Acertos: 0/3</div>
+                </div>
+
+                <div class="nav-actions">
+                  <button class="btn" onclick="proximoModulo(4)">Próximo módulo →</button>
+                </div>
+              </article>
+
+              <article id="mod5" class="aula-conteudo" data-modulo="5">
+                <div class="aula-title">
+                  <label class="inline"><input type="checkbox" class="aula-checkbox" data-aula="m5a1"> <strong>Aula 1 — Google Ads: Capturando a Demanda Existente (Rede de Pesquisa)</strong></label>
+                </div>
+                <div class="aula-text">
+                  <p>O Google Ads é diferente do Meta Ads: ele é para **capturar a demanda existente**. O usuário já está buscando ativamente seu produto. A **Rede de Pesquisa** (os anúncios de texto no topo do Google) é a ferramenta mais poderosa para vendas diretas e B2B.</p>
+                </div>
+
+                <hr class="lesson-divider">
+                <div class="aula-title">
+                  <label class="inline"><input type="checkbox" class="aula-checkbox" data-aula="m5a2"> <strong>Aula 2 — Leilão do Google e o Fator de Qualidade</strong></label>
+                </div>
+                <div class="aula-text">
+                  <p>O Google Ads não é só para quem paga mais. O **Fator de Qualidade** (Quality Score) mede a relevância e a experiência do anúncio. Um Fator de Qualidade alto pode fazer você pagar menos por um clique e ranquear melhor que um concorrente que paga mais.</p>
+                </div>
+                
+                <hr class="lesson-divider">
+                <div class="aula-title">
+                  <label class="inline"><input type="checkbox" class="aula-checkbox" data-aula="m5a3"> <strong>Aula 3 — Estratégia de Palavras-Chave no Google Ads (Correspondência)</strong></label>
+                </div>
+                <div class="aula-text">
+                  <p>A escolha correta do tipo de correspondência de palavra-chave (Exata, Frase ou Ampla) é vital para o orçamento. Use correspondência **Exata** (ex: `[curso marketing digital]`) para leads de alta intenção e **Ampla** para descoberta de novos termos.</p>
+                </div>
+
+                <hr class="lesson-divider">
+                <div class="aula-title">
+                  <label class="inline"><input type="checkbox" class="aula-checkbox" data-aula="m5a4"> <strong>Aula 4 — Anúncios Dinâmicos e de Máximo Desempenho (PMAX)</strong></label>
+                </div>
+                <div class="aula-text">
+                  <p>O **PMAX** (Performance Max) é a solução de IA do Google para alcançar clientes em todas as redes (Pesquisa, Display, YouTube, Gmail). Você fornece os ativos (texto, imagens) e a IA otimiza automaticamente. É ideal para e-commerce e grandes objetivos de conversão.</p>
+                </div>
+
+                <hr class="lesson-divider">
+                <div class="aula-title">
+                  <label class="inline"><input type="checkbox" class="aula-checkbox" data-aula="m5a5"> <strong>Aula 5 — Remarketing na Rede de Display e YouTube</strong></label>
+                </div>
+                <div class="aula-text">
+                  <p>O **Remarketing** no Google (Rede de Display, YouTube) usa banners visuais para reengajar pessoas que visitaram o site, mas não converteram. É altamente eficaz, pois mira um público que já conhece a marca.</p>
+                </div>
+                
+                <hr class="lesson-divider">
+                <div class="aula-title">
+                  <label class="inline"><input type="checkbox" class="aula-checkbox" data-aula="m5a6"> <strong>Aula 6 — Automação de Lances e Otimização Diária</strong></label>
+                </div>
+                <div class="aula-text">
+                  <p>A maioria das campanhas deve usar a **Automação de Lances** (ex: Maximizar Conversões, CPA Desejado), deixando a IA do Google gerenciar o leilão em tempo real, baseada nos seus objetivos de negócio.</p>
+                </div>
+
+
+                <div class="teste">
+                  <h4>Teste de Conhecimento - Módulo 5 (3 Questões)</h4>
+                  
+                  <p>13) Qual a principal diferença entre o Google Ads (Rede de Pesquisa) e o Meta Ads?</p>
+                  <label><input type="radio" name="q13" value="correta"> Google Ads captura demanda existente; Meta Ads cria demanda por segmentação.</label>
+                  <label><input type="radio" name="q13" value="errada"> Google Ads é mais barato; Meta Ads é mais caro.</label>
+                  <label><input type="radio" name="q13" value="errada"> Google Ads só usa vídeo; Meta Ads só usa texto.</label>
+                  <span class="question-feedback" id="feedback-q13"></span>
+
+                  <p>14) O que é o Fator de Qualidade (Quality Score)?</p>
+                  <label><input type="radio" name="q14" value="correta"> Uma métrica que avalia a relevância do seu anúncio para a palavra-chave e landing page.</label>
+                  <label><input type="radio" name="q14" value="errada"> Apenas o valor do lance máximo.</label>
+                  <label><input type="radio" name="q14" value="errada"> O número de cliques que o anúncio recebe.</label>
+                  <span class="question-feedback" id="feedback-q14"></span>
+
+                  <p>15) Qual tipo de campanha de Google Ads utiliza a Inteligência Artificial para otimizar a entrega em todas as redes do Google?</p>
+                  <label><input type="radio" name="q15" value="errada"> Rede de Pesquisa Manual</label>
+                  <label><input type="radio" name="q15" value="correta"> Performance Max (PMAX)</label>
+                  <label><input type="radio" name="q15" value="errada"> Remarketing Display</label>
+                  <span class="question-feedback" id="feedback-q15"></span>
+
+                  <button class="btn btn-verificar" data-modulo="5" onclick="verificarTeste(5)">Verificar Respostas</button>
+                  <div class="resultado" id="resM5">Acertos: 0/3</div>
+                </div>
+
+                <div class="nav-actions">
+                  <button class="btn" onclick="proximoModulo(5)">Próximo módulo →</button>
+                </div>
+              </article>
+
+              <article id="mod6" class="aula-conteudo" data-modulo="6">
+                <div class="aula-title">
+                  <label class="inline"><input type="checkbox" class="aula-checkbox" data-aula="m6a1"> <strong>Aula 1 — Google Analytics 4 (GA4): Análise Baseada em Eventos</strong></label>
+                </div>
+                <div class="aula-text">
+                  <p>O **GA4** (Google Analytics 4) é o novo padrão. Ele se concentra em **Eventos** (ações do usuário) em vez de sessões. Configure eventos cruciais como `page_view`, `purchase`, `form_submit` e utilize a interface "Explorações" para análises profundas de funil e jornada.</p>
+                </div>
+
+                <hr class="lesson-divider">
+                <div class="aula-title">
+                  <label class="inline"><input type="checkbox" class="aula-checkbox" data-aula="m6a2"> <strong>Aula 2 — Funil de Conversão no GA4 e Atribuição de Crédito</strong></label>
+                </div>
+                <div class="aula-text">
+                  <p>Mapeie o funil no GA4 para identificar onde os usuários estão abandonando. O **Modelo de Atribuição** padrão é `Data-driven` (Orientado por Dados), que usa a IA para distribuir o crédito da conversão entre todos os pontos de contato, fornecendo uma visão mais realista do ROI.</p>
+                </div>
+
+                <hr class="lesson-divider">
+                <div class="aula-title">
+                  <label class="inline"><input type="checkbox" class="aula-checkbox" data-aula="m6a3"> <strong>Aula 3 — O Ciclo do Growth Hacking: AARRR (Pirate Metrics)</strong></label>
+                </div>
+                <div class="aula-text">
+                  <p>**Growth Hacking** é uma mentalidade de experimentação rápida e baixo custo para o crescimento. O funil **AARRR** (Aquisição, Ativação, Retenção, Receita, Referência) é o modelo central para guiar as experiências de Growth.</p>
+                </div>
+
+                <hr class="lesson-divider">
+                <div class="aula-title">
+                  <label class="inline"><input type="checkbox" class="aula-checkbox" data-aula="m6a4"> <strong>Aula 4 — Testes A/B e Otimização da Taxa de Conversão (CRO)</strong></label>
+                </div>
+                <div class="aula-text">
+                  <p>**CRO** (Conversion Rate Optimization) é otimizar elementos da sua página (títulos, botões) para aumentar a taxa de conversão. Use **Testes A/B** para comparar a versão A e B e identificar qual gera mais resultados, baseando suas decisões em dados e não em achismos.</p>
+                </div>
+
+                <hr class="lesson-divider">
+                <div class="aula-title">
+                  <label class="inline"><input type="checkbox" class="aula-checkbox" data-aula="m6a5"> <strong>Aula 5 — Benchmarking e Análise da Concorrência</strong></label>
+                </div>
+                <div class="aula-text">
+                  <p>Monitore os concorrentes (benchmarking) para identificar boas práticas e lacunas no mercado. Use ferramentas de SEO (Ahrefs, SEMrush) para descobrir quais palavras-chave e anúncios seus concorrentes estão usando, economizando tempo na sua estratégia.</p>
+                </div>
+
+                <div class="teste">
+                  <h4>Teste de Conhecimento - Módulo 6 (3 Questões)</h4>
+                  
+                  <p>16) Qual o novo modelo de dados central do Google Analytics 4 (GA4)?</p>
+                  <label><input type="radio" name="q16" value="correta"> Eventos (Ações do Usuário)</label>
+                  <label><input type="radio" name="q16" value="errada"> Sessões e Visualizações de Tela</label>
+                  <label><input type="radio" name="q16" value="errada"> Produtos Vendidos</label>
+                  <span class="question-feedback" id="feedback-q16"></span>
+
+                  <p>17) Qual é a principal característica do Growth Hacking?</p>
+                  <label><input type="radio" name="q17" value="errada"> Foco em grandes orçamentos de publicidade</label>
+                  <label><input type="radio" name="q17" value="correta"> Mentalidade de experimentação rápida e foco no crescimento escalável</label>
+                  <label><input type="radio" name="q17" value="errada"> Foco exclusivo em SEO</label>
+                  <span class="question-feedback" id="feedback-q17"></span>
+
+                  <p>18) Qual etapa do funil AARRR é mais importante para o LTV?</p>
+                  <label><input type="radio" name="q18" value="correta"> Retenção</label>
+                  <label><input type="radio" name="q18" value="errada"> Aquisição</label>
+                  <label><input type="radio" name="q18" value="errada"> Receita</label>
+                  <span class="question-feedback" id="feedback-q18"></span>
+
+                  <button class="btn btn-verificar" data-modulo="6" onclick="verificarTeste(6)">Verificar Respostas</button>
+                  <div class="resultado" id="resM6">Acertos: 0/3</div>
+                </div>
+
+                <div class="nav-actions">
+                  <button class="btn" onclick="proximoModulo(6)">Próximo módulo →</button>
+                </div>
+              </article>
+
+              <article id="mod7" class="aula-conteudo" data-modulo="7">
+                <div class="aula-title">
+                  <label class="inline"><input type="checkbox" class="aula-checkbox" data-aula="m7a1"> <strong>Aula 1 — Copywriting: A Arte da Escrita Persuasiva</strong></label>
+                </div>
+                <div class="aula-text">
+                  <p>**Copywriting** é a escrita que vende. Não se trata de convencer à força, mas de conectar o produto com a necessidade do cliente, resolvendo um problema. Uma boa copy foca nos **Benefícios** do produto, não nas suas **Características**.</p>
+                </div>
+
+                <hr class="lesson-divider">
+                <div class="aula-title">
+                  <label class="inline"><input type="checkbox" class="aula-checkbox" data-aula="m7a2"> <strong>Aula 2 — AIDA e PAS: Estruturas Clássicas de Copy</strong></label>
+                </div>
+                <div class="aula-text">
+                  <p>Use a estrutura **AIDA** (Atenção, Interesse, Desejo, Ação) para guiar o leitor. A estrutura **PAS** (Problema, Agitação, Solução) é excelente para vídeos curtos e anúncios de redes sociais, pois foca na dor do cliente antes de apresentar a solução.</p>
+                </div>
+
+                <hr class="lesson-divider">
+                <div class="aula-title">
+                  <label class="inline"><input type="checkbox" class="aula-checkbox" data-aula="m7a3"> <strong>Aula 3 — Gatilhos Mentais: Urgência, Escassez e Prova Social</strong></label>
+                </div>
+                <div class="aula-text">
+                  <p>**Gatilhos Mentais** são atalhos que o cérebro usa para tomar decisões rápidas. Use a **Escassez** (limitar a quantidade), a **Urgência** (limitar o tempo) e a **Prova Social** (depoimentos, números de clientes) para reduzir a fricção na compra.</p>
+                </div>
+
+                <hr class="lesson-divider">
+                <div class="aula-title">
+                  <label class="inline"><input type="checkbox" class="aula-checkbox" data-aula="m7a4"> <strong>Aula 4 — Storytelling e a Jornada do Herói (Conexão Emocional)</strong></label>
+                </div>
+                <div class="aula-text">
+                  <p>**Storytelling** é a técnica de contar histórias que geram conexão. Use a **Jornada do Herói** para posicionar o cliente como o herói da história e a sua marca como o mentor que o ajuda a superar o desafio (o problema).</p>
+                </div>
+
+
+                <div class="teste">
+                  <h4>Teste de Conhecimento - Módulo 7 (3 Questões)</h4>
+                  
+                  <p>19) Copywriting de sucesso foca em quê?</p>
+                  <label><input type="radio" name="q19" value="errada"> Características do produto</label>
+                  <label><input type="radio" name="q19" value="correta"> Benefícios e como o produto resolve o problema do cliente</label>
+                  <label><input type="radio" name="q19" value="errada"> Linguagem formal e complexa</label>
+                  <span class="question-feedback" id="feedback-q19"></span>
+
+                  <p>20) Qual estrutura de copy é ideal para anúncios curtos em mídias sociais?</p>
+                  <label><input type="radio" name="q20" value="errada"> AIDA</label>
+                  <label><input type="radio" name="q20" value="correta"> PAS (Problema, Agitação, Solução)</label>
+                  <label><input type="radio" name="q20" value="errada"> LTV</label>
+                  <span class="question-feedback" id="feedback-q20"></span>
+
+                  <p>21) O que o gatilho mental de Prova Social utiliza para gerar confiança?</p>
+                  <label><input type="radio" name="q21" value="correta"> Depoimentos, número de clientes e endosso de terceiros</label>
+                  <label><input type="radio" name="q21" value="errada"> Ofertas por tempo limitado</label>
+                  <label><input type="radio" name="q21" value="errada"> Mostrar o preço alto do produto</label>
+                  <span class="question-feedback" id="feedback-q21"></span>
+
+                  <button class="btn btn-verificar" data-modulo="7" onclick="verificarTeste(7)">Verificar Respostas</button>
+                  <div class="resultado" id="resM7">Acertos: 0/3</div>
+                </div>
+
+                <div class="nav-actions">
+                  <button class="btn" onclick="proximoModulo(7)">Próximo módulo →</button>
+                </div>
+              </article>
+
+              <article id="mod8" class="aula-conteudo" data-modulo="8">
+                <div class="aula-title">
+                  <label class="inline"><input type="checkbox" class="aula-checkbox" data-aula="m8a1"> <strong>Aula 1 — O que é CRM e por que é vital para o LTV</strong></label>
+                </div>
+                <div class="aula-text">
+                  <p>**CRM** (Customer Relationship Management) é a tecnologia e a estratégia de gerenciar todas as interações e relacionamentos com os clientes. O objetivo é melhorar o relacionamento, o que impacta diretamente o **LTV** (Lifetime Value) e a retenção. Ele centraliza dados de marketing, vendas e suporte.</p>
+                </div>
+
+                <hr class="lesson-divider">
+                <div class="aula-title">
+                  <label class="inline"><input type="checkbox" class="aula-checkbox" data-aula="m8a2"> <strong>Aula 2 — Integração CRM com Marketing Automation</strong></label>
+                </div>
+                <div class="aula-text">
+                  <p>A união de CRM (Dados) e Automação (Ação) é a base de um marketing eficiente. O CRM informa ao sistema de automação quem está pronto para comprar, e a automação dispara a sequência de e-mails ou notificação mais adequada.</p>
+                </div>
+
+                <hr class="lesson-divider">
+                <div class="aula-title">
+                  <label class="inline"><input type="checkbox" class="aula-checkbox" data-aula="m8a3"> <strong>Aula 3 — O Funil de Vendas no CRM e o Lead Scoring</strong></label>
+                </div>
+                <div class="aula-text">
+                  <p>O CRM mapeia o funil de vendas, mostrando onde cada lead está. O **Lead Scoring** é a pontuação que o lead recebe baseada em suas interações. Leads com pontuação alta estão "quentes" e devem ser passados imediatamente para a equipe de vendas.</p>
+                </div>
+
+                <hr class="lesson-divider">
+                <div class="aula-title">
+                  <label class="inline"><input type="checkbox" class="aula-checkbox" data-aula="m8a4"> <strong>Aula 4 — Estratégias de Pós-Venda, Upsell e Cross-Sell</strong></label>
+                </div>
+                <div class="aula-text">
+                  <p>O **Pós-Venda** é a fase mais rentável. Use o CRM para identificar oportunidades de **Upsell** (vender um produto mais caro/melhor) e **Cross-Sell** (vender produtos complementares) para o cliente que já comprou e está satisfeito.</p>
+                </div>
+
+                <hr class="lesson-divider">
+                <div class="aula-title">
+                  <label class="inline"><input type="checkbox" class="aula-checkbox" data-aula="m8a5"> <strong>Aula 5 — Chatbots e Suporte Automatizado (24/7)</strong></label>
+                </div>
+                <div class="aula-text">
+                  <p>Chatbots com IA, integrados ao CRM, podem responder a 80% das dúvidas comuns de forma imediata e automatizada, qualificando o lead antes de passá-lo para um atendente humano. Garanta que o suporte esteja disponível 24/7.</p>
+                </div>
+
+                <div class="teste">
+                  <h4>Teste de Conhecimento - Módulo 8 (3 Questões)</h4>
+                  
+                  <p>22) O que o Lead Scoring determina?</p>
+                  <label><input type="radio" name="q22" value="errada"> Apenas o nome do lead</label>
+                  <label><input type="radio" name="q22" value="correta"> A pontuação de um lead com base em suas interações, indicando o quão "quente" ele está para comprar</label>
+                  <label><input type="radio" name="q22" value="errada"> O preço final do produto</label>
+                  <span class="question-feedback" id="feedback-q22"></span>
+
+                  <p>23) Qual estratégia visa vender um produto mais caro/melhor para um cliente que já comprou?</p>
+                  <label><input type="radio" name="q23" value="correta"> Upsell</label>
+                  <label><input type="radio" name="q23" value="errada"> Cross-Sell (Vender complementares)</label>
+                  <label><input type="radio" name="q23" value="errada"> Lead Nurturing</label>
+                  <span class="question-feedback" id="feedback-q23"></span>
+
+                  <p>24) O CRM é mais importante para qual fase do funil?</p>
+                  <label><input type="radio" name="q24" value="errada"> Topo (Aquisição)</label>
+                  <label><input type="radio" name="q24" value="correta"> Fundo (Conversão e Retenção)</label>
+                  <label><input type="radio" name="q24" value="errada"> Meio (Descoberta)</label>
+                  <span class="question-feedback" id="feedback-q24"></span>
+
+                  <button class="btn btn-verificar" data-modulo="8" onclick="verificarTeste(8)">Verificar Respostas</button>
+                  <div class="resultado" id="resM8">Acertos: 0/3</div>
+                </div>
+
+                <div class="nav-actions">
+                  <button class="btn" onclick="proximoModulo(8)">Próximo módulo →</button>
+                </div>
+              </article>
+
+              <article id="mod9" class="aula-conteudo" data-modulo="9">
+                <div class="aula-title">
+                  <label class="inline"><input type="checkbox" class="aula-checkbox" data-aula="m9a1"> <strong>Aula 1 — IA no Marketing: Automatização de Criação e Otimização</strong></label>
+                </div>
+                <div class="aula-text">
+                  <p>A **Inteligência Artificial** está revolucionando o marketing. Ferramentas de IA podem gerar rascunhos de copy, criar imagens para anúncios, segmentar públicos automaticamente e otimizar campanhas em tempo real. O foco do profissional deve ser supervisionar a IA e refinar os prompts.</p>
+                </div>
+
+                <hr class="lesson-divider">
+                <div class="aula-title">
+                  <label class="inline"><input type="checkbox" class="aula-checkbox" data-aula="m9a2"> <strong>Aula 2 — Prompt Engineering para Copy e Conteúdo</strong></label>
+                </div>
+                <div class="aula-text">
+                  <p>**Prompt Engineering** é a habilidade de escrever comandos (prompts) eficazes para extrair o melhor da IA. Para copy, utilize a estrutura: **Ato**r (ex: Copywriter experiente) + **Tarefa** (ex: Escreva 5 títulos de e-mail) + **Contexto** (ex: Para um produto X).</p>
+                </div>
+
+                <hr class="lesson-divider">
+                <div class="aula-title">
+                  <label class="inline"><input type="checkbox" class="aula-checkbox" data-aula="m9a3"> <strong>Aula 3 — IA na Personalização e Experiência do Cliente (CX)</strong></label>
+                </div>
+                <div class="aula-text">
+                  <p>A IA permite uma **personalização em massa**. Ela pode recomendar produtos em tempo real (e-commerce), personalizar a linha de assunto do e-mail para cada usuário e criar experiências de chatbot que se adaptam à jornada do cliente.</p>
+                </div>
+
+                <hr class="lesson-divider">
+                <div class="aula-title">
+                  <label class="inline"><input type="checkbox" class="aula-checkbox" data-aula="m9a4"> <strong>Aula 4 — Ética, Viés e Revisão Humana no Conteúdo de IA</strong></label>
+                </div>
+                <div class="aula-text">
+                  <p>O conteúdo gerado por IA pode conter **viés** (bias) ou informações incorretas (alucinações). A **Revisão Humana** é crucial para garantir a ética, a precisão e a voz da marca. A IA é uma ferramenta, não um substituto.</p>
+                </div>
+
+                <hr class="lesson-divider">
+                <div class="aula-title">
+                  <label class="inline"><input type="checkbox" class="aula-checkbox" data-aula="m9a5"> <strong>Aula 5 — Tendências: Web 3.0, Metaverso e o Futuro do Marketing</strong></label>
+                </div>
+                <div class="aula-text">
+                  <p>O futuro aponta para a **Web 3.0** (descentralização) e o uso de **Realidade Aumentada (AR)**. O marketing deve se preparar para experiências imersivas no **Metaverso**, onde a interação com a marca será mais profunda e baseada em NFTs e economias digitais.</p>
+                </div>
+
+                <div class="teste">
+                  <h4>Teste de Conhecimento - Módulo 9 (3 Questões)</h4>
+                  
+                  <p>25) O que é Prompt Engineering?</p>
+                  <label><input type="radio" name="q25" value="correta"> A habilidade de escrever comandos eficazes para guiar e obter o melhor resultado da Inteligência Artificial</label>
+                  <label><input type="radio" name="q25" value="errada"> O desenvolvimento do hardware da IA</label>
+                  <label><input type="radio" name="q25" value="errada"> Um tipo de automação de e-mail</label>
+                  <span class="question-feedback" id="feedback-q25"></span>
+
+                  <p>26) Qual o papel do profissional de marketing no uso de ferramentas de IA?</p>
+                  <label><input type="radio" name="q26" value="correta"> Supervisionar, refinar os prompts e garantir a ética e precisão do conteúdo</label>
+                  <label><input type="radio" name="q26" value="errada"> Apenas copiar e colar o resultado sem revisão</label>
+                  <label><input type="radio" name="q26" value="errada"> Desenvolver os algoritmos</label>
+                  <span class="question-feedback" id="feedback-q26"></span>
+
+                  <p>27) Qual é a principal característica da Web 3.0 relevante para o futuro do marketing?</p>
+                  <label><input type="radio" name="q27" value="errada"> Mais anúncios na TV</label>
+                  <label><input type="radio" name="q27" value="correta"> Descentralização, maior posse de dados pelo usuário e experiências imersivas</label>
+                  <label><input type="radio" name="q27" value="errada"> Foco em mídias impressas</label>
+                  <span class="question-feedback" id="feedback-q27"></span>
+
+                  <button class="btn btn-verificar" data-modulo="9" onclick="verificarTeste(9)">Verificar Respostas</button>
+                  <div class="resultado" id="resM9">Acertos: 0/3</div>
+                </div>
+
+                <div class="nav-actions">
+                  <button class="btn" onclick="proximoModulo(9)">Finalizar Curso</button>
+                </div>
+              </article>
+
+            </div>
+        </section>
+    </main>
+</div>
+
+<div id="modalMatricula" class="modal-overlay hidden">
+    <div class="modal-content">
+        <button class="close-btn" onclick="fecharModal('modalMatricula')">×</button>
+        <h3 style="color: var(--primary);">✅ Certificado de Matrícula</h3>
+        <p>Parabéns, <strong id="nomeCertMatricula"></strong>! Você está oficialmente matriculado(a) no curso completo de Marketing Digital.</p>
+        <p class="small">Este documento atesta sua inscrição. **Não é o Certificado de Conclusão**.</p>
+        <div style="text-align: left; background: var(--teste-bg); padding: 15px; border-radius: 8px; margin-top: 20px; border: 1px solid var(--border-color);">
+            <p style="margin: 0; font-weight: 600; color: var(--text-dark);">**Dados do Aluno (Validação):**</p>
+            <p class="small" style="margin: 5px 0 0 0;">Nome: <span id="nomeMatriculaDisplay"></span></p>
+            <p class="small" style="margin: 5px 0 0 0;">CPF: <span id="cpfMatriculaDisplay"></span></p>
+            <p class="small" style="margin: 5px 0 0 0;">Data de Matrícula: <span id="dataMatriculaDisplay"></span></p>
+        </div>
+        <button class="btn ghost" onclick="fecharModal('modalMatricula')" style="margin-top: 20px;">Entendido</button>
+    </div>
+</div>
+
+
+<script>
+  // Mapeamento de aulas por módulo para a contagem
+  const MOD_AULAS = { 1: 4, 2: 5, 3: 6, 4: 4, 5: 6, 6: 5, 7: 4, 8: 5, 9: 5 };
+  const TOTAL_AULAS = Object.values(MOD_AULAS).reduce((a, b) => a + b, 0); // 40
+  const TOTAL_QUESTOES = 27; // 9 módulos * 3 questões
+
+  // Carrega informações do aluno e progresso do armazenamento local (navegador)
+  let alunoInfo = JSON.parse(localStorage.getItem('alunoInfo')) || { nome: null, cpf: null, matriculado: false };
+  let progresso = JSON.parse(localStorage.getItem('progresso')) || {}; // { m1a1: true, q1: 'correta' }
+  let acertos = JSON.parse(localStorage.getItem('acertos')) || {}; // { 1: 0, 2: 0, ... }
+  let numeroCertificado = localStorage.getItem('numeroCertificado') || null;
+
+  // --- Funções de Navegação e Visualização ---
+
+  function showView(viewId) {
+    document.querySelectorAll('.view-container').forEach(v => v.classList.add('hidden'));
+    document.getElementById(viewId).classList.remove('hidden');
+
+    if (viewId === 'course-content') {
+        document.querySelector('header').classList.remove('hidden');
+    } else {
+        document.querySelector('header').classList.add('hidden');
+    }
+  }
+
+  function fecharModal(modalId) {
+    document.getElementById(modalId).classList.add('hidden');
+  }
+
+  // --- Funções de Inscrição e Matrícula ---
+
+  function formatarCpf(campo) {
+    let cpf = campo.value.replace(/\D/g, "");
+    cpf = cpf.replace(/(\d{3})(\d)/, "$1.$2");
+    cpf = cpf.replace(/(\d{3})(\d)/, "$1.$2");
+    cpf = cpf.replace(/(\d{3})(\d{1,2})$/, "$1-$2");
+    campo.value = cpf;
+  }
+
+  function saveAlunoInfo() {
+    const nome = document.getElementById('nomeAluno').value.trim();
+    const cpf = document.getElementById('cpfAluno').value.trim();
+
+    if (nome.length < 5 || cpf.length !== 14) {
+      document.getElementById('nomeError').style.display = 'block';
+      return;
+    }
+
+    document.getElementById('nomeError').style.display = 'none';
+    alunoInfo = { nome: nome, cpf: cpf, matriculado: true };
+    localStorage.setItem('alunoInfo', JSON.stringify(alunoInfo));
+    
+    // Inicializa acertos para os 9 módulos
+    for(let i=1; i<=9; i++) {
+        if (!acertos[i]) acertos[i] = 0;
+    }
+    localStorage.setItem('acertos', JSON.stringify(acertos));
+
+
+    // Atualiza display do aluno
+    document.getElementById('alunoNomeDisplay').textContent = alunoInfo.nome;
+    document.getElementById('alunoCpfDisplay').textContent = alunoInfo.cpf;
+    document.getElementById('verMatriculaBtn').disabled = false;
+    document.querySelector('header h2').textContent = `Certificado automático — ${nome}`;
+
+    // Inicia o curso
+    iniciarCurso();
+    showView('course-content');
+    irParaModulo(1);
+    document.getElementById('conteudoPrincipal').scrollIntoView({ behavior: 'smooth' });
+  }
+  
+  function iniciarCurso() {
+    if (alunoInfo.matriculado) {
+        showView('course-content');
+        irParaModulo(1);
+    } else {
+        showView('splash-screen');
+    }
+  }
+
+  // --- Funções de Navegação do Curso ---
+
+  function irParaModulo(num) {
+    document.querySelectorAll('.aula-conteudo').forEach(a=>a.classList.add('hidden'));
+    const proximo = document.querySelector(`#mod${num}`);
+    if(proximo) proximo.classList.remove('hidden');
+    
+    document.querySelectorAll('.lista-modulos li').forEach(li=>li.classList.remove('active'));
+    const liAtivo = document.querySelector(`.lista-modulos li[data-mod="${num}"]`);
+    if(liAtivo) liAtivo.classList.add('active');
+
+    // Atualiza cabeçalho (apenas exemplo de imagem e título)
+    // O título real deve ser buscado do HTML do módulo ou de um array
+    const titulo = liAtivo.textContent.trim();
+    document.getElementById('tituloModulo').textContent = titulo;
+    document.getElementById('descModulo').textContent = `Conteúdo detalhado sobre ${titulo.split('—')[1]}`;
+  }
+
+  function proximoModulo(modAtual) {
+    const proximo = modAtual + 1;
+    if(proximo <= 9){
+      irParaModulo(proximo);
+      document.getElementById('conteudoPrincipal').scrollIntoView({behavior: 'smooth'});
+    } else {
+      // Último módulo
+      if (document.querySelectorAll('.aula-checkbox:checked').length === TOTAL_AULAS) {
+          gerarCertificado();
+      } else {
+          alert("Você precisa concluir todas as aulas antes de gerar o certificado!");
+      }
+    }
+  }
+
+  // --- Funções de Progresso e Testes ---
+
+  function atualizarProgresso() {
+    let concluidas = 0;
+    document.querySelectorAll('.aula-checkbox').forEach(aula => {
+      const aulaId = aula.dataset.aula;
+      if (aula.checked) {
+        progresso[aulaId] = true;
+        concluidas++;
+      } else {
+        delete progresso[aulaId];
+      }
+    });
+
+    localStorage.setItem('progresso', JSON.stringify(progresso));
+
+    // Barra de Progresso e Texto
+    document.getElementById('barraProgresso').style.width = (concluidas/TOTAL_AULAS*100)+'%';
+    document.getElementById('textoProgresso').textContent = `${concluidas} / ${TOTAL_AULAS} aulas concluídas`;
+    
+    // Status dos Módulos e Acertos Totais
+    let totalAcertos = 0;
+    for (const mod in MOD_AULAS) {
+        const aulasMod = MOD_AULAS[mod];
+        const concluidasMod = document.querySelectorAll(`#mod${mod} .aula-checkbox:checked`).length;
+        const percentualMod = Math.round(concluidasMod / aulasMod * 100);
+        document.getElementById(`statusM${mod}`).textContent = `${percentualMod}%`;
+        
+        // Aplica feedback de acertos no teste
+        if (acertos[mod] !== undefined) {
+            totalAcertos += acertos[mod];
+            const percentAcerto = Math.round((acertos[mod] / 3) * 100);
+            const badgeElem = document.getElementById(`statusM${mod}`);
+            if (percentAcerto >= 60) {
+                badgeElem.style.background = '#3c6e40';
+                badgeElem.style.color = 'var(--success)';
+            } else if (percentAcerto > 0) {
+                badgeElem.style.background = '#7e57c2'; // Roxo para acerto parcial
+                badgeElem.style.color = '#e1bee7';
+            }
+        }
+    }
+    document.getElementById('acertosTotais').textContent = `${totalAcertos}/${TOTAL_QUESTOES}`;
+
+
+    // Habilita Certificado
+    const todasAulasConcluidas = (concluidas === TOTAL_AULAS);
+    const todosTestesAprovados = Object.keys(MOD_AULAS).every(mod => {
+        const percentAcerto = Math.round((acertos[mod] / 3) * 100);
+        return percentAcerto >= 60;
+    });
+
+    const podeGerarCertificado = todasAulasConcluidas && todosTestesAprovados;
+    document.getElementById('verCertBtn').disabled = !podeGerarCertificado;
+    document.getElementById('mensagemFinal').style.display = podeGerarCertificado ? 'block' : 'none';
+
+    // Rola para a mensagem final se o curso foi concluído
+    if (podeGerarCertificado) {
+        document.getElementById('conteudoPrincipal').scrollIntoView({ behavior: 'smooth' });
+    }
+  }
+
+  // Listener para todos os checkboxes de aula
+  document.querySelectorAll('.aula-checkbox').forEach(aula => aula.addEventListener('change', atualizarProgresso));
+
+  // Função para verificar os testes
+  function verificarTeste(modNum) {
+    const modulo = document.getElementById(`mod${modNum}`);
+    let corretas = 0;
+    const questoes = [];
+    
+    // Coleta as respostas e questões
+    for (let i = 1; i <= 3; i++) {
+        const qId = `q${(modNum - 1) * 3 + i}`;
+        const respostaCerta = modulo.querySelector(`input[name="${qId}"][value="correta"]`);
+        const respostaSelecionada = modulo.querySelector(`input[name="${qId}"]:checked`);
+        const feedback = document.getElementById(`feedback-${qId}`);
+        
+        let correta = false;
+        if (respostaSelecionada) {
+            if (respostaSelecionada.value === 'correta') {
+                corretas++;
+                correta = true;
+                feedback.textContent = '✅ Correto!';
+                feedback.className = 'question-feedback feedback-certo';
+            } else {
+                feedback.textContent = `❌ Incorreto. O correto é: ${respostaCerta.parentNode.textContent.trim()}.`;
+                feedback.className = 'question-feedback feedback-errado';
+            }
+            progresso[qId] = respostaSelecionada.value; // Salva a resposta do usuário
+        } else {
+            feedback.textContent = '⚠️ Resposta pendente.';
+            feedback.className = 'question-feedback feedback-errado';
+        }
+    }
+
+    acertos[modNum] = corretas;
+    localStorage.setItem('acertos', JSON.stringify(acertos));
+    localStorage.setItem('progresso', JSON.stringify(progresso));
+
+    const percentual = Math.round((corretas / 3) * 100);
+    const resultadoDiv = document.getElementById(`resM${modNum}`);
+    resultadoDiv.textContent = `Acertos: ${corretas}/3 (${percentual}%)`;
+    
+    if (percentual >= 60) {
+        resultadoDiv.style.background = '#3c6e40';
+        resultadoDiv.style.color = 'var(--success)';
+        alert(`Módulo ${modNum} aprovado! Você acertou ${corretas}/3.`);
+    } else {
+        resultadoDiv.style.background = '#4a0e13';
+        resultadoDiv.style.color = 'var(--danger)';
+        alert(`Módulo ${modNum} reprovado. Mínimo de 60% (2/3) de acertos é necessário para aprovação.`);
+    }
+
+    atualizarProgresso(); // Atualiza a barra lateral
+  }
+
+  // --- Funções de Certificado ---
+
+  function gerarNumeroCertificado() {
+    if (numeroCertificado) return numeroCertificado;
+    // Gera um número único e complexo (timestamp + random string)
+    const timestamp = Date.now().toString(36);
+    const randomString = Math.random().toString(36).substring(2, 9).toUpperCase();
+    const novoNumero = `DIG-MKT-${timestamp}-${randomString}`;
+    localStorage.setItem('numeroCertificado', novoNumero);
+    numeroCertificado = novoNumero;
+    return novoNumero;
+  }
+
+  function gerarCertificadoMatricula() {
+    if (!alunoInfo.matriculado) return alert('Você precisa se inscrever primeiro!');
+
+    document.getElementById('nomeCertMatricula').textContent = alunoInfo.nome;
+    document.getElementById('nomeMatriculaDisplay').textContent = alunoInfo.nome;
+    document.getElementById('cpfMatriculaDisplay').textContent = alunoInfo.cpf;
+    document.getElementById('dataMatriculaDisplay').textContent = new Date().toLocaleDateString('pt-BR');
+
+    document.getElementById('modalMatricula').classList.remove('hidden');
+  }
+
+  function gerarCertificado() {
+    if (!document.getElementById('verCertBtn').disabled) {
+        const nome = alunoInfo.nome;
+        const cpf = alunoInfo.cpf;
+        const numeroCert = gerarNumeroCertificado();
+        
+        document.getElementById('aulasWrapper').classList.add('hidden');
+        document.getElementById('cabecalhoModulo').classList.add('hidden');
+        document.getElementById('mensagemFinal').style.display = 'block';
+
+        // Exibe o número de validação no sidebar e na mensagem final
+        document.getElementById('numeroCertificadoValue').textContent = numeroCert;
+        document.getElementById('numeroCertificadoDisplay').style.display = 'block';
+        
+        alert(`Certificado de Conclusão gerado com sucesso para: ${nome}!\nNúmero de Validação ÚNICO: ${numeroCert}\nVocê pode copiá-lo para usar no LinkedIn.`);
+
+        // Aqui seria a lógica para gerar um PDF com todas as informações (necessita de backend ou libs mais complexas)
+        // Por agora, apenas exibimos a mensagem de sucesso e o número.
+    } else {
+        alert('Você precisa concluir todas as 40 aulas E ser aprovado em todos os 9 testes (mínimo 60% de acertos por módulo) para gerar o Certificado de Conclusão.');
+    }
+  }
+
+  // --- Inicialização ---
+
+  document.addEventListener('DOMContentLoaded', () => {
+    // Aplica o tema escuro
+    document.body.classList.add('dark-mode'); 
+
+    // Restaura o progresso
+    document.querySelectorAll('.aula-checkbox').forEach(aula => {
+      const aulaId = aula.dataset.aula;
+      if (progresso[aulaId]) {
+        aula.checked = true;
+      }
+    });
+    
+    // Restaura respostas dos testes (apenas a correta/errada para manter o estado)
+    for (const q in progresso) {
+        if (q.startsWith('q')) {
+            const resposta = progresso[q];
+            const radio = document.querySelector(`input[name="${q}"][value="${resposta}"]`);
+            if (radio) radio.checked = true;
+        }
+    }
+    
+    // Restaura o número do certificado se já foi gerado
+    if (numeroCertificado) {
+        document.getElementById('numeroCertificadoValue').textContent = numeroCertificado;
+    }
+
+
+    // Verifica se o aluno já se inscreveu
+    if (alunoInfo.matriculado) {
+      document.getElementById('alunoNomeDisplay').textContent = alunoInfo.nome;
+      document.getElementById('alunoCpfDisplay').textContent = alunoInfo.cpf;
+      document.getElementById('verMatriculaBtn').disabled = false;
+      document.querySelector('header h2').textContent = `Certificado automático — ${alunoInfo.nome}`;
+      showView('course-content');
+      irParaModulo(1);
+    } else {
+      showView('splash-screen');
+    }
+    
+    atualizarProgresso(); // Roda na inicialização para pegar o estado inicial e o resultado dos testes
+  });
+
+</script>
+</body>
+</html>
